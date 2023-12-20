@@ -23,7 +23,7 @@ class DeliveryTest {
 
     @Test
     @DisplayName("Should successfully plan two meetings on different days")
-    void shouldSuccessfullyPlanTwoMeetingsDifferentDays() {
+    void shouldSuccessfulPlanAndReplanMeeting() {
         // общие данные
         generateAndInputCommonFields("ru");
         // данные по дате события
@@ -33,22 +33,10 @@ class DeliveryTest {
         var secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
         // дата 1
         inputDateAndBook(firstMeetingDate);
+        checkForSuccessNotification(firstMeetingDate);
         // дата 2
-        inputDateAndBook(secondMeetingDate);
-    }
-
-    @Test
-    @DisplayName("Should successfully plan and replan meeting")
-    void shouldSuccessfullyReplanTwoMeetingsSameDay() {
-        // общие данные
-        generateAndInputCommonFields("ru");
-        // данные по дате события
-        var daysToAddForMeeting = 5;
-        var meetingDate = DataGenerator.generateDate(daysToAddForMeeting);
-        // дата 1
-        inputDateAndBook(meetingDate);
-        // дата 2
-        inputDateAndRebook(meetingDate);
+        inputDateAndRebook(secondMeetingDate);
+        checkForSuccessNotification(secondMeetingDate);
     }
 
     void generateAndInputCommonFields(String locale) {
@@ -62,16 +50,13 @@ class DeliveryTest {
     void inputDateAndBook(String date) {
         updateCalendarInput(date);
         $(byText("Запланировать")).click();
-        checkForSuccessNotification(date);
     }
 
     void inputDateAndRebook(String date) {
-        updateCalendarInput(date);
-        $(byText("Запланировать")).click();
+        inputDateAndBook(date);
         // перепланировать
         $("[data-test-id=replan-notification]").shouldBe(visible);
         $(byText("Перепланировать")).click();
-        checkForSuccessNotification(date);
     }
 
     void updateCalendarInput(String date) {
@@ -79,7 +64,6 @@ class DeliveryTest {
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         // записать в поле новую дату
         $("[data-test-id=date] input").setValue(date);
-
     }
 
     void checkForSuccessNotification(String date) {
