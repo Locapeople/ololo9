@@ -2,7 +2,6 @@ package ru.netology.delivery.data;
 
 import com.github.javafaker.Faker;
 import lombok.Value;
-import lombok.val;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,8 +21,26 @@ public class DataGenerator {
     }
 
     public static String generateCity(String locale) {
-        Faker faker = new Faker(new Locale(locale));
-        return faker.address().city();
+        String[] availableCities = new String[]{
+                "Архангельск",
+                "Белгород",
+                "Брянск",
+                "Воронеж",
+                "Иркутск",
+                "Калуга",
+                "Омск",
+                "Рязань",
+                "Тверь",
+                "Москва",
+                "Самара"
+        };
+        // faker выбирает любой город, даже не столицу округа,
+        // так что этот метод не подходит, будем выбирать случайный из массива
+        // подходящих городов
+        // Faker faker = new Faker(new Locale(locale));
+        // String city = faker.address().city()
+        int cityIndex = new Random().nextInt(availableCities.length);
+        return availableCities[cityIndex];
     }
 
     public static String generateName(String locale) {
