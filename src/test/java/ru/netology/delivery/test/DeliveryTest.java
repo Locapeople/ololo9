@@ -72,7 +72,6 @@ class DeliveryTest {
         $("[data-test-id=replan-notification]").shouldBe(visible);
         $(byText("Перепланировать")).click();
         checkForSuccessNotification(date);
-
     }
 
     void updateCalendarInput(String date) {
@@ -82,8 +81,9 @@ class DeliveryTest {
         $("[data-test-id=date] input").setValue(date);
 
     }
+
     void checkForSuccessNotification(String date) {
-        var notification = $("[data-test-id=success-notification]")
+        $("[data-test-id=success-notification]")
                 .shouldBe(visible)
                 .shouldHave(exactText("Успешно!\nВстреча успешно запланирована на " + date));
         $("[data-test-id=success-notification] > button").click();
